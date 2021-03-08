@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+	<head>
+		<title> Lottery Numbers </title>
+        <link rel="stylesheet" type = "text/css" href="lotteryStyle.css">
+		<script language="JavaScript">
+            window.onload = function()
+            {
+                lottery = prompt('Enter the first 5 winning numbers (1-48), separated by a space:', 1); 
+                lotteryArr = lottery.split(" ");
+                lotteryArr = lotteryArr.sort(function(a,b){return a-b});
+                lotteryLuck = prompt('Enter the lucky ball number (1-18): ', 1);
+                
+                final(lotteryArr, lotteryLuck);
+            }
+            
+            function randPick()
+            {
+                var numbers = new Array(4);
+                for (i=0; i <= 4; i++){
+                    number = Math.random() * 47 + 1;
+                    numbers[i] = number.toFixed(0);
+                }
+                numbers = numbers.sort(function(a,b){return a-b});
+                lucky = (Math.random() * 17 + 1).toFixed(0);
+                
+                
+                numbers = [10,11,17,27,32];
+                lucky = 15;
+                
+                return [numbers, lucky];
+            } 
+            
+            function calcMatch(numbers,lotteryArr,lotteryLuck, lucky)
+            {
+                match = 0;
+                luckyMatch = false;
+                for (i = 0; i <= 4; i++)
+                {
+                    for (n=0;n<=4;n++){
+                        if (numbers[i] == lotteryArr[n])
+                        {
+                            match++;
+                            continue;
+                        }
+                    }  
+                }
+                if (lotteryLuck == lucky)
+                {
+                    luckyMatch = true;
+                }
+                return [match,luckyMatch];
+            } 
+
+            function findPrize(match,luckyMatch)
+            {
+                if (match == 5 && luckyMatch)
+                win = "$7,000 a WEEK for LIFE";
+                else if (match == 5)
+                win = "$25,000 a YEAR for LIFE";
+                else if (match == 4 && luckyMatch)
+                win = "$5,000"
+                else if (match == 4)
+                win = "$200";
+                else if (match == 3 && luckyMatch)
+                win = "$150";
+                else if (match == 3)
+                win = "$20";
+                else if (match == 2 && luckyMatch)
+                win = "$25";
+                else if (match == 2)
+                win = "$3";
+                else if (match == 1 && luckyMatch)
+                win = "$6";
+                else if (luckyMatch)
+                win = "$4";
+                else 
+                win = "$0";
+                return win;
+            } 
+			
+            function printAns(numbers,lotteryArr,lotteryLuck, lucky,win){
+                  document.getElementById("here").innerHTML = "Your numbers were: "
+                for (n = 0;n<=4;n++)
+                {
+                    document.getElementById("here").innerHTML += "<b>" + numbers[n] + " </b>";
+                }
+                document.getElementById("here").innerHTML += "<br>Your l\Lucky b\Ball number was: <b>"+lucky + "</b><br><br>";
+                document.getElementById("here").innerHTML += "The winning numbers were: <b>"
+                for (n = 0;n<=4;n++)
+                {
+                    document.getElementById("here").innerHTML +=  "<b>" + lotteryArr[n] + " </b>";
+                }
+                document.getElementById("here").innerHTML += "</b><br>The winning lucky ball number was: <b>"+ lotteryLuck + "</b><br><br>";
+                document.getElementById("here").innerHTML += "<b>" + match + "</b> of the first 5 numbers matched.<br>";
+                if (luckyMatch == true){
+                    document.getElementById("here").innerHTML += "The Lucky Ball <b>matched!</b><br><br>";
+                }
+                else {
+                    document.getElementById("here").innerHTML += "The Lucky Ball <b>did not match.</b><br><br>";
+                }
+                document.getElementById("here").innerHTML += "Your payout is: <b>" + win + "</b>!!!"
+				printCongrats(win);
+            }
+			
+			function printCongrats(win){
+				if (win == "$7,000 a WEEK for LIFE"||win == "$25,000 a YEAR for LIFE")
+				{
+					document.getElementById("here").innerHTML += "<h2 class = 'win'> Congratulations! You are a life-long winner!</h2>"
+				}
+				else if(win == "$0"){
+					document.getElementById("here").innerHTML += "<h2 class='lose'>Today is not your day... try again tomorrow!</h2>"
+				}
+				else {
+					document.getElementById("here").innerHTML += "<h2 class='win'> Congratulations! You won something!</h2>"
+				}	
+			}
+			
+            function final(lotteryArr, luckyLottery)
+            {
+               [numbers, lucky] = randPick();
+               [match,luckyMatch] = calcMatch(numbers,lotteryArr,lotteryLuck, lucky)
+               win = findPrize(match,luckyMatch);
+               printAns(numbers,lotteryArr,lotteryLuck, lucky,win)
+            }
+        </script>
+	</head>
+	<body>
+		<h1> Lottery Results </h1>
+        <div id = "here"></div>
+    </body>
+</html>
